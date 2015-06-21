@@ -1,6 +1,7 @@
 ﻿
 using Apache.NMS;
 using Apache.NMS.Util;
+using Message.Queue.Processor.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Message.Queue.Processor
+namespace Message.Queue.Processor.Console
 {
     public class MessageGenerator
     {
@@ -51,14 +52,5 @@ namespace Message.Queue.Processor
         
     }
 
-    [Serializable]
-    public class Item
-    {
-        public long  Id { get; set; }
-        public string Content{ get; set; }
-    }
-
-    public enum QueueType{
-        ItemQueue
-    }
+ 
 }
