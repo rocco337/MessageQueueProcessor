@@ -41,7 +41,7 @@ namespace Message.Queue.Processor.Console
                     var rnd = new Random();
                     for (var ii = 0; ii < numOfMessages; ii++)
                     {     
-                        var request = session.CreateObjectMessage(item);
+                        var request = session.CreateObjectMessage(item);                        
                         request.NMSCorrelationID = Guid.NewGuid().ToString();
                         producer.Send(request);
                     }

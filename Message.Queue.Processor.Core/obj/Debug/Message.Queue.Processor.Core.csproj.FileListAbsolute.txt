@@ -1,0 +1,15 @@
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\obj\Debug\Message.Queue.Processor.Core.csprojResolveAssemblyReference.cache
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Message.Queue.Processor.Core.dll
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Message.Queue.Processor.Core.pdb
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Akka.dll
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Apache.NMS.ActiveMQ.dll
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Apache.NMS.dll
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Newtonsoft.Json.dll
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Akka.xml
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Apache.NMS.pdb
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Apache.NMS.xml
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Apache.NMS.ActiveMQ.pdb
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Apache.NMS.ActiveMQ.xml
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\bin\Debug\Newtonsoft.Json.xml
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\obj\Debug\Message.Queue.Processor.Core.dll
+c:\users\roko\documents\visual studio 2013\Projects\Message.Queue.Processor\Message.Queue.Processor.Core\obj\Debug\Message.Queue.Processor.Core.pdb
