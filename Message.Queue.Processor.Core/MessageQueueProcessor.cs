@@ -13,64 +13,61 @@ namespace Message.Queue.Processor.Core
 {
     public static class MessageQueueProcessorFactory
     {
-        public static void Create(int intervalMiliseconds, Dictionary<QueueType, Action<IMessage>> queueDef)
+        public static void Create(List<QueueType> queueTypes)
         {
-            new MessageQueueProcessor(intervalMiliseconds, queueDef);
+            foreach (var queueType in queueTypes)
+            {
+                new MessageQueueProcessor(queueType);
+            }
         }
 
-        public static void Create(int numOfInstances, int intervalMiliseconds, Dictionary<QueueType, Action<IMessage>> queueDef)
+        public static void Create(QueueType queueType)
         {
-            for (var ii = 0; ii < numOfInstances; ii++)
-            {
-                new MessageQueueProcessor(intervalMiliseconds, queueDef);
-            }
+            new MessageQueueProcessor(queueType);
         }
     }
 
     internal class MessageQueueProcessor
     {
+        private const int _batchSize = 100;
+        private const int _numOfInstances = 10;
+
         private readonly ActorSystem system = ActorSystem.Create("MessageQueueProcessor");
 
-        public MessageQueueProcessor(int intervalMiliseconds, Dictionary<QueueType, Action<IMessage>> queueDef)
+        public MessageQueueProcessor(QueueType type)
         {
-            var reader = system.ActorOf(Props.Create<MessageReaderActor>().WithRouter(new ConsistentHashingPool(10)));
-
-            ProcessMessages(reader);
+            var reader = system.ActorOf(Props.Create<MessageReaderActor>().WithRouter(new RoundRobinPool(_numOfInstances)), "reader-pool");
+            ProcessMessages(reader, type);
         }
 
-        private static async void ProcessMessages(IActorRef myBusinessActor)
+        private static void ProcessMessages(IActorRef messageReaderActor, QueueType type)
         {
+            var sc = Stopwatch.StartNew();
+            var tasks = new List<Task>();
             while (true)
             {
-                var batch = (new ActiveMqMessageReader()).ReadBatchMessages(QueueType.ItemQueue, 10);
+                var batch = (new ActiveMqMessageReader()).ReadBatchMessages(type, _batchSize);
 
-                var tasks = (
-                    from res in batch
-                    let importantMessage = res
-                    let ask = myBusinessActor.Ask<Status.Success>(new ConsistentHashableEnvelope(importantMessage,
-                            importantMessage.GetHashCode()), TimeSpan.FromSeconds(1))
-                    let done = ask.ContinueWith(t =>
-                    {
-                        if (t.IsCanceled)
-                        {
-                            Console.WriteLine("Failed to ack {0}", importantMessage);
-                        }
-                        else
-                        {
-                            res.Acknowledge();
-                            Console.WriteLine("Completed {0}", importantMessage);
-                        }
-                    }, TaskContinuationOptions.None)
-                    select done).ToList();
+                if (!batch.Any())
+                {
+                    sc.Stop();
+                    break;
+                }
 
-                await Task.WhenAll(tasks);
-                Debug.WriteLine("All messages handled (acked or failed)");
+                var ask = messageReaderActor.Ask<Status.Success>(new ConsistentHashableEnvelope(batch, batch.GetHashCode()), TimeSpan.FromSeconds(1));
+
+                tasks.Add(ask);
             }
+
+            Task.WhenAll(tasks).ContinueWith((t) =>
+            {
+                Console.WriteLine("Queue processing finished in: " + sc.ElapsedMilliseconds + " ms.");
+            });
         }
     }
-        public enum QueueType
-        {
-            ItemQueue
-        }
-    
+
+    public enum QueueType
+    {
+        ItemQueue
+    }
 }

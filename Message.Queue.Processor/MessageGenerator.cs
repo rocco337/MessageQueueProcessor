@@ -1,5 +1,4 @@
-﻿
-using Apache.NMS;
+﻿using Apache.NMS;
 using Apache.NMS.Util;
 using Message.Queue.Processor.Core;
 using System;
@@ -15,24 +14,18 @@ namespace Message.Queue.Processor.Console
     {
         private Uri _activeMqUri = Configuration.ActiveMqUri;
 
-        public MessageGenerator()
-        {
-
-        }
-
-        public void Generate(int numOfMessages,QueueType type,object item)
+        public void Generate(int numOfMessages, QueueType type, object item)
         {
             Debug.WriteLine("About to connect to " + _activeMqUri);
- 
-            // NOTE: ensure the nmsprovider-activemq.config file exists in the executable folder.
+
             IConnectionFactory factory = new NMSConnectionFactory(_activeMqUri);
- 
-            using(IConnection connection = factory.CreateConnection())
-            using(ISession session = connection.CreateSession())
-            {    
+
+            using (IConnection connection = factory.CreateConnection())
+            using (ISession session = connection.CreateSession())
+            {
                 IDestination destination = SessionUtil.GetQueue(session, type.ToString());
                 Debug.WriteLine("Using destination: " + destination);
-                               
+
                 using (IMessageProducer producer = session.CreateProducer(destination))
                 {
                     // Start the connection so that messages will be processed.
@@ -40,17 +33,13 @@ namespace Message.Queue.Processor.Console
 
                     var rnd = new Random();
                     for (var ii = 0; ii < numOfMessages; ii++)
-                    {     
-                        var request = session.CreateObjectMessage(item);                        
+                    {
+                        var request = session.CreateObjectMessage(item);
                         request.NMSCorrelationID = Guid.NewGuid().ToString();
                         producer.Send(request);
                     }
-                  
                 }
             }
         }
-        
     }
-
- 
 }
